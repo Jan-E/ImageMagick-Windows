@@ -13,41 +13,41 @@ matrix:
 environment:
 
   matrix:
-    - im_platform: "x64"
-      im_name:     "dll-Q8"
+#    - im_platform: "x64"
+#      im_name:     "dll-Q8"
     - im_platform: "x64"
       im_name:     "dll-Q16"
-    - im_platform: "x64"
-      im_name:     "static-Q8"
-    - im_platform: "x64"
-      im_name:     "static-Q16"
+#    - im_platform: "x64"
+#      im_name:     "static-Q8"
+#    - im_platform: "x64"
+#      im_name:     "static-Q16"
 
-    - im_platform: "x86"
-      im_name:     "dll-Q8"
+#    - im_platform: "x86"
+#      im_name:     "dll-Q8"
     - im_platform: "x86"
       im_name:     "dll-Q16"
-    - im_platform: "x86"
-      im_name:     "static-Q8"
-    - im_platform: "x86"
-      im_name:     "static-Q16"
+#    - im_platform: "x86"
+#      im_name:     "static-Q8"
+#    - im_platform: "x86"
+#      im_name:     "static-Q16"
 
-    - im_platform: "x64"
-      im_name:     "hdri-dll-Q16"
-    - im_platform: "x64"
-      im_name:     "hdri-static-Q16"
+#    - im_platform: "x64"
+#      im_name:     "hdri-dll-Q16"
+#    - im_platform: "x64"
+#      im_name:     "hdri-static-Q16"
 
-    - im_platform: "x86"
-      im_name:     "hdri-dll-Q16"
-    - im_platform: "x86"
-      im_name:     "hdri-static-Q16"
+#    - im_platform: "x86"
+#      im_name:     "hdri-dll-Q16"
+#    - im_platform: "x86"
+#      im_name:     "hdri-static-Q16"
 
-    - im_platform: "x64"
-      im_name:     "portable-Q16"
-    - im_platform: "x86"
-      im_name:     "portable-Q16"
+#    - im_platform: "x64"
+#      im_name:     "portable-Q16"
+#    - im_platform: "x86"
+#      im_name:     "portable-Q16"
 
-    - im_platform: "none"
-      im_name:     "source"
+#    - im_platform: "none"
+#      im_name:     "source"
 
 install:
   - cd AppVeyor
@@ -55,15 +55,9 @@ install:
 
 artifacts:
   - path: 'Windows-Distribution\*.exe'
-  - path: 'Windows-Distribution\*.zip'
-  - path: 'Windows-Distribution\Version.txt'
 
 build_script:
   - cd AppVeyor
   - Build.cmd %im_platform% %im_name%
 
 test: off
-
-deploy:
-  - provider: Environment
-    name: ImageMagick6
