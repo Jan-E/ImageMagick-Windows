@@ -1,4 +1,4 @@
-function GetConfig($platform, $name)
+function GetConfig($platform, $name, $vcversion, $toolset)
 {
   $config = $null
   $options = "/includeOptional /installedSupport /deprecated"
@@ -10,6 +10,10 @@ function GetConfig($platform, $name)
   elseif ($name -eq "dll-Q16")
   {
     $config = @{options="/dmt /noHdri /Q16 $options";perl=$true;type="installer";solution="VisualDynamicMT.sln"}
+  }
+  elseif ($name -eq "deps-dll-Q16")
+  {
+    $config = @{options="/dmt /noHdri /Q16 $options";perl=$true;type="deps";solution="VisualDynamicMT.sln"}
   }
   elseif ($name -eq "static-Q8")
   {
@@ -38,6 +42,8 @@ function GetConfig($platform, $name)
   {
     $config.platform = $platform
     $config.name = $name
+    $config.vcversion = $vcversion
+    $config.toolset = $toolset
   }
 
   return $config
@@ -92,9 +98,23 @@ function BuildConfiguration($config)
   }
 
   Set-Location ../VisualMagick/configure
-  Start-Process configure.exe -ArgumentList "/noWizard /VS2013 $options" -wait
+  Start-Process configure.exe -ArgumentList "/noWizard /$($config.vcversion) $options" -wait
 
   Set-Location ..
+  foreach ($f in gci -r -include "*.vcxproj*") 
+    { (gc $f.fullname) |
+       foreach { $_ -replace "v141_xp" ,"$($config.toolset)" } |
+       foreach { $_ -replace "v140_xp" ,"$($config.toolset)" } |
+       foreach { $_ -replace "v120_xp" ,"$($config.toolset)" } |
+       foreach { $_ -replace "v110_xp" ,"$($config.toolset)" } |
+       foreach { $_ -replace "v100_xp" ,"$($config.toolset)" } |
+       foreach { $_ -replace "v141"    ,"$($config.toolset)" } |
+       foreach { $_ -replace "v140"    ,"$($config.toolset)" } |
+       foreach { $_ -replace "v120"    ,"$($config.toolset)" } |
+       foreach { $_ -replace "v110"    ,"$($config.toolset)" } |
+       foreach { $_ -replace "v100"    ,"$($config.toolset)" } |
+       sc $f.fullname 
+    }
   msbuild $config.solution /m:4 /t:Rebuild ("/p:Configuration=Release,Platform=$platformName")
   CheckExitCode "Failed to build: $($config.name)"
 
@@ -134,6 +154,10 @@ function CreatePackage($config, $version)
   elseif ($config.type -eq "portable")
   {
     CreatePortable $config $version
+  }
+  elseif ($config.type -eq "deps")
+  {
+    CreateDeps $config $version
   }
   elseif ($config.type -eq "source")
   {
@@ -192,6 +216,26 @@ function CreatePortable($config, $version)
   CreateZipFile $output ".\Portable"
 }
 
+function CreateDeps($config, $version)
+{
+  New-Item -ItemType directory -Path .\Deps | Out-Null
+  New-Item -ItemType directory -Path .\Deps\bin | Out-Null
+  New-Item -ItemType directory -Path .\Deps\lib | Out-Null
+  New-Item -ItemType directory -Path .\Deps\include | Out-Null
+  New-Item -ItemType directory -Path .\Deps\include\wand | Out-Null
+  New-Item -ItemType directory -Path .\Deps\include\magick | Out-Null
+
+  Copy-Item ..\VisualMagick\bin\*.* .\Deps\bin
+  Copy-Item ..\VisualMagick\lib\*.* .\Deps\lib
+  Copy-Item ..\ImageMagick\Wand\*.h .\Deps\include\wand -recurse
+  Copy-Item ..\ImageMagick\Magick\*.h .\Deps\include\magick -recurse
+
+  CheckExitCode "Failed to copy files."
+
+  $output = "..\Windows-Distribution\ImageMagick-$($version)-$($config.vcversion)-$($config.platform).zip"
+  CreateZipFile $output ".\Deps"
+}
+
 function CreateSource($version)
 {
   $folder = ".\Source\ImageMagick-$version"
@@ -231,6 +275,8 @@ function CheckUpload($version)
 
 $platform = $args[0]
 $name = $args[1]
+$vcversion = $args[2]
+$toolset = $args[3]
 
 $version = GetVersion
 
@@ -243,14 +289,20 @@ if ($name -eq "source")
 }
 else
 {
-  $config = GetConfig $platform $name
+  $config = GetConfig $platform $name $vcversion $toolset
   if ($config -eq $null)
   {
     throw "Unknown configuration: $name"
   }
 
+  Write-Host "Start-Sleep -s 15"
+  Start-Sleep -s 15
   BuildConfigure
+  Write-Host "Start-Sleep -s 5"
+  Start-Sleep -s 5
   BuildConfiguration $config
+  Write-Host "Start-Sleep -s 5"
+  Start-Sleep -s 5
   CreatePackage $config $version
   CheckUpload
 }
