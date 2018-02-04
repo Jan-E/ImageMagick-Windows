@@ -115,15 +115,18 @@ function BuildConfiguration($config)
        foreach { $_ -replace "v100"    ,"$($config.toolset)" } |
        sc $f.fullname 
     }
-  # msbuild $config.solution /m:4 /t:Rebuild ("/p:Configuration=Release,Platform=$platformName")
-  devenv $config.solution /Build "Release|$platformName""
+  msbuild $config.solution /m:4 /t:Rebuild ("/p:Configuration=Release,Platform=$platformName")
+  devenv $config.solution /Build "Release|$platformName"
   CheckExitCode "Failed to build: $($config.name)"
 
   Set-Location ../AppVeyor
 
-  if ($config.perl -eq $true)
+  if ($config.type -ne "deps")
   {
-    BuildPerlMagick $platform
+    if ($config.perl -eq $true)
+    {
+      BuildPerlMagick $platform
+    }
   }
 }
 
