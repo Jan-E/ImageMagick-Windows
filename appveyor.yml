@@ -13,10 +13,15 @@ matrix:
 cache:
   - C:\Strawberry-x86 -> AppVeyor\Install.cmd
   - C:\Strawberry-x64 -> AppVeyor\Install.cmd
+  - C:\InnoSetup -> AppVeyor\Install.cmd
 
 environment:
 
   matrix:
+    - im_platform: "x86"
+      im_name:     "deps-dll-Q16"
+      im_vstudio:  "VS2013"
+      im_toolset:  "v120"
     - im_platform: "x86"
       im_name:     "deps-dll-Q16"
       im_vstudio:  "VS2013"
