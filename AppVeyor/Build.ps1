@@ -116,13 +116,15 @@ function BuildConfiguration($config)
        sc $f.fullname 
     }
   msbuild $config.solution /m:4 /t:Rebuild ("/p:Configuration=Release,Platform=$platformName")
-  # CheckExitCode "Failed to build: $($config.name)"
+  CheckExitCode "Failed to build: $($config.name)"
 
   Set-Location ../AppVeyor
 
-  if ($config.perl -eq $true)
-  {
-    BuildPerlMagick $platform
+  if ($config.type -ne "deps")
+    if ($config.perl -eq $true)
+    {
+      BuildPerlMagick $platform
+    }
   }
 }
 
@@ -232,7 +234,7 @@ function CreateDeps($config, $version)
 
   CheckExitCode "Failed to copy files."
 
-  $output = "..\Windows-Distribution\ImageMagick-$($version)-$($config.vcversion)-$($config.platform).zip"
+  $output = "..\Windows-Distribution\ImageMagick-$($version)-$($config.vcversion)-$($config.toolset).zip"
   CreateZipFile $output ".\Deps"
 }
 
