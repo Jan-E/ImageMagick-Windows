@@ -86,7 +86,7 @@ function BuildConfigure()
        foreach { $_ -replace "v100","v110" } |
        sc $f.fullname 
     }
-  wdexpress configure.sln /t:Rebuild ("/p:Configuration=Release,Platform=Win32")
+  msbuild configure.sln /t:Rebuild ("/p:Configuration=Release,Platform=Win32")
   CheckExitCode "Failed to build: configure.exe"
 
   Set-Location ../../AppVeyor
