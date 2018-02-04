@@ -81,11 +81,6 @@ function BuildConfigure()
 {
   Set-Location ../VisualMagick/configure
   devenv /upgrade configure.vcxproj
-  foreach ($f in gci -r -include "*.vcxproj*") 
-    { (gc $f.fullname) |
-       foreach { $_ -replace "v100","v110" } |
-       sc $f.fullname 
-    }
   msbuild configure.sln /t:Rebuild ("/p:Configuration=Release,Platform=Win32")
   CheckExitCode "Failed to build: configure.exe"
 
@@ -120,8 +115,8 @@ function BuildConfiguration($config)
        foreach { $_ -replace "v100"    ,"$($config.toolset)" } |
        sc $f.fullname 
     }
-  msbuild /i $config.solution /m:4 /t:Rebuild ("/p:Configuration=Release,Platform=$platformName")
-  CheckExitCode "Failed to build: $($config.name)"
+  msbuild $config.solution /m:4 /t:Rebuild ("/p:Configuration=Release,Platform=$platformName")
+  # CheckExitCode "Failed to build: $($config.name)"
 
   Set-Location ../AppVeyor
 
