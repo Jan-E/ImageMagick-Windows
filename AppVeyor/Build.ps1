@@ -121,12 +121,9 @@ function BuildConfiguration($config)
 
   Set-Location ../AppVeyor
 
-  if ($config.type -ne "deps")
+  if ($config.perl -eq $true)
   {
-    if ($config.perl -eq $true)
-    {
-      BuildPerlMagick $platform
-    }
+    BuildPerlMagick $platform
   }
 }
 
