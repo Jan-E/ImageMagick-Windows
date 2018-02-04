@@ -19,11 +19,11 @@ environment:
   matrix:
     - im_platform: "x86"
       im_name:     "deps-dll-Q16"
-      im_vstudio:  "VS2012"
+      im_vstudio:  "VS2013"
       im_toolset:  "v110"
     - im_platform: "x86"
       im_name:     "deps-dll-Q16"
-      im_vstudio:  "VS2008"
+      im_vstudio:  "VS2013"
       im_toolset:  "v90"
 
 install:

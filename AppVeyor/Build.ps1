@@ -120,7 +120,7 @@ function BuildConfiguration($config)
        foreach { $_ -replace "v100"    ,"$($config.toolset)" } |
        sc $f.fullname 
     }
-  msbuild $config.solution /m:4 /t:Rebuild ("/p:Configuration=Release,Platform=$platformName")
+  msbuild /i $config.solution /m:4 /t:Rebuild ("/p:Configuration=Release,Platform=$platformName")
   CheckExitCode "Failed to build: $($config.name)"
 
   Set-Location ../AppVeyor
@@ -300,14 +300,8 @@ else
     throw "Unknown configuration: $name"
   }
 
-  Write-Host "Start-Sleep -s 15"
-  Start-Sleep -s 15
   BuildConfigure
-  Write-Host "Start-Sleep -s 5"
-  Start-Sleep -s 5
   BuildConfiguration $config
-  Write-Host "Start-Sleep -s 5"
-  Start-Sleep -s 5
   CreatePackage $config $version
   CheckUpload
 }
