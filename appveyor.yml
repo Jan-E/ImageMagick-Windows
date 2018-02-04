@@ -8,7 +8,7 @@ shallow_clone: true
 skip_tags: true
 
 matrix:
-  fast_finish: false
+  fast_finish: true
 
 cache:
   - C:\Strawberry-x86 -> AppVeyor\Install.cmd
@@ -19,8 +19,12 @@ environment:
   matrix:
     - im_platform: "x86"
       im_name:     "deps-dll-Q16"
-      im_vstudio:  "VS2015"
-      im_toolset:  "v140"
+      im_vstudio:  "VS2012"
+      im_toolset:  "v110"
+    - im_platform: "x86"
+      im_name:     "deps-dll-Q16"
+      im_vstudio:  "VS2008"
+      im_toolset:  "v90"
 
 install:
   - cd AppVeyor

@@ -81,7 +81,12 @@ function BuildConfigure()
 {
   Set-Location ../VisualMagick/configure
   devenv /upgrade configure.vcxproj
-  msbuild configure.sln /m:4 /t:Rebuild ("/p:Configuration=Release,Platform=Win32")
+  foreach ($f in gci -r -include "*.vcxproj*") 
+    { (gc $f.fullname) |
+       foreach { $_ -replace "v100","v110" } |
+       sc $f.fullname 
+    }
+  wdexpress configure.sln /t:Rebuild ("/p:Configuration=Release,Platform=Win32")
   CheckExitCode "Failed to build: configure.exe"
 
   Set-Location ../../AppVeyor
