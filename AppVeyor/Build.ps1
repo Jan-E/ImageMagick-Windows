@@ -1,4 +1,4 @@
-function GetConfig($platform, $name, $vcversion, $toolset)
+function GetConfig($platform, $name, $vstudio, $vcversion, $toolset)
 {
   $config = $null
   $options = "/includeOptional /installedSupport /deprecated"
@@ -42,6 +42,7 @@ function GetConfig($platform, $name, $vcversion, $toolset)
   {
     $config.platform = $platform
     $config.name = $name
+    $config.vstudio = $vstudio
     $config.vcversion = $vcversion
     $config.toolset = $toolset
   }
@@ -85,7 +86,9 @@ function BuildConfigure()
        foreach { $_ -replace "v100","v140" } |
        sc $f.fullname 
     }
-  devenv /upgrade configure.vcxproj
+  Write-Host "devenv /upgrade configure.vcxproj"
+  devenv /upgrade configure.vcxproj | Out-Null
+  Write-Host "devenv /upgrade configure.vcxproj - upgraded"
   msbuild configure.sln /m:4 /t:Rebuild ("/p:Configuration=Release,Platform=Win32")
   CheckExitCode "Failed to build: configure.exe"
 
@@ -103,7 +106,7 @@ function BuildConfiguration($config)
   }
 
   Set-Location ../VisualMagick/configure
-  Start-Process configure.exe -ArgumentList "/noWizard /$($config.vcversion) $options" -wait
+  Start-Process configure.exe -ArgumentList "/noWizard /$($config.vstudio) $options" -Wait
 
   Set-Location ..
   foreach ($f in gci -r -include "*.vcxproj*") 
@@ -120,7 +123,7 @@ function BuildConfiguration($config)
        foreach { $_ -replace "v100"    ,"$($config.toolset)" } |
        sc $f.fullname 
     }
-  if ($config.vcversion -eq "VS2017")
+  if ($config.vstudio -eq "VS2017")
   {
     if ($config.platform -eq "x64")
     {
@@ -260,6 +263,7 @@ function CreateDeps($config, $version)
   Copy-Item ..\VisualMagick\lib\*.* .\Deps\lib
   Copy-Item ..\ImageMagick\Wand\*.h .\Deps\include\wand -recurse
   Copy-Item ..\ImageMagick\Magick\*.h .\Deps\include\magick -recurse
+  Copy-Item ..\ImageMagick\LICENSE .\Deps\LICENSE.txt
 
   CheckExitCode "Failed to copy files."
 
@@ -306,8 +310,9 @@ function CheckUpload($version)
 
 $platform = $args[0]
 $name = $args[1]
-$vcversion = $args[2]
-$toolset = $args[3]
+$vstudio = $args[2]
+$vcversion = $args[3]
+$toolset = $args[4]
 
 $version = GetVersion
 
@@ -320,14 +325,12 @@ if ($name -eq "source")
 }
 else
 {
-  $config = GetConfig $platform $name $vcversion $toolset
+  $config = GetConfig $platform $name $vstudio $vcversion $toolset
   if ($config -eq $null)
   {
     throw "Unknown configuration: $name"
   }
 
-  Write-Host "Start-Sleep -s 15"
-  Start-Sleep -s 15
   BuildConfigure
   BuildConfiguration $config
   CreatePackage $config $version
