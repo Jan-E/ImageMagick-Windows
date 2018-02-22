@@ -104,5 +104,5 @@ clone_repository $1 $2 'webp'
 clone_repository $1 $2 'win2k' 'win2k-6'
 clone_repository $1 $2 'zlib'
 
-clone_repository $1 $2 'VisualMagick' 'master' 'externals' '455a80e'
+clone_repository $1 $2 'VisualMagick' 'master' 'externals'
 copy_externals
