@@ -17,17 +17,28 @@ clone_repository()
 
   if [ "$2" == "full" ]; then
     if [ ! -d "$dir" ]; then
+      echo git clone -b $branch $1/$3.git $dir
       git clone -b $branch $1/$3.git $dir
     fi
     cd $dir
     git pull
     cd ..
   else
-    if [ ! -d "$dir" ]; then
-      git clone -b $branch --depth 1 $1/$3.git $dir
+    if [ "" != "$6" ]; then
+      echo git clone -b $branch $1/$3.git $dir
+      git clone -b $branch $1/$3.git $dir
+    else 
+      if [ ! -d "$dir" ]; then
+        echo git clone -b $branch --depth 1 $1/$3.git $dir
+        git clone -b $branch --depth 1 $1/$3.git $dir
+      fi
     fi
   fi
   cd $dir
+  if [ "" != "$6" ]; then
+    echo git checkout "$6"
+    git checkout "$6"
+  fi
   git show --oneline -s
   cd ..
 }
@@ -72,7 +83,7 @@ clone_repository $1 $2 'exr'
 clone_repository $1 $2 'ffi'
 clone_repository $1 $2 'flif'
 clone_repository $1 $2 'glib'
-clone_repository $1 $2 'ImageMagick' 'ImageMagick-6'
+clone_repository $1 $2 'ImageMagick' 'ImageMagick-6' 'ImageMagick' 'a440815'
 clone_repository $1 $2 'jbig'
 clone_repository $1 $2 'jp2'
 clone_repository $1 $2 'jpeg-turbo' 'master' 'jpeg'
