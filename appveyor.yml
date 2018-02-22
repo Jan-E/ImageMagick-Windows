@@ -16,32 +16,32 @@ cache:
 environment:
 
   matrix:
+    - im_platform:  "x86"
+      im_name:      "deps-dll-Q16"
+      im_vstudio:   "VS2017"
+      im_vcversion: "vc15"
+      im_toolset:   "v141"
+
+    - im_platform:  "x64"
+      im_name:      "deps-dll-Q16"
+      im_vstudio:   "VS2017"
+      im_vcversion: "vc15"
+      im_toolset:   "v141"
+
+    - im_platform:  "x86"
+      im_name:      "deps-dll-Q16"
+      im_vstudio:   "VS2015"
+      im_vcversion: "vc14"
+      im_toolset:   "v140"
+
+    - im_platform:  "x64"
+      im_name:      "deps-dll-Q16"
+      im_vstudio:   "VS2015"
+      im_vcversion: "vc14"
+      im_toolset:   "v140"
+
     - im_platform:  "none"
       im_name:      "source"
-
-    - im_platform:  "x86"
-      im_name:      "deps-dll-Q16"
-      im_vstudio:   "VS2017"
-      im_vcversion: "vc15"
-      im_toolset:   "v141"
-
-    - im_platform:  "x64"
-      im_name:      "deps-dll-Q16"
-      im_vstudio:   "VS2017"
-      im_vcversion: "vc15"
-      im_toolset:   "v141"
-
-    - im_platform:  "x86"
-      im_name:      "deps-dll-Q16"
-      im_vstudio:   "VS2015"
-      im_vcversion: "vc14"
-      im_toolset:   "v140"
-
-    - im_platform:  "x64"
-      im_name:      "deps-dll-Q16"
-      im_vstudio:   "VS2015"
-      im_vcversion: "vc14"
-      im_toolset:   "v140"
 
 install:
   - cd AppVeyor
