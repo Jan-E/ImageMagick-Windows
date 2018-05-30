@@ -258,11 +258,14 @@ function CreateDeps($config, $version)
   New-Item -ItemType directory -Path .\Deps\include | Out-Null
   New-Item -ItemType directory -Path .\Deps\include\wand | Out-Null
   New-Item -ItemType directory -Path .\Deps\include\magick | Out-Null
+  New-Item -ItemType directory -Path .\Deps\include\Magick++ | Out-Null
 
   Copy-Item ..\VisualMagick\bin\*.* .\Deps\bin
   Copy-Item ..\VisualMagick\lib\*.* .\Deps\lib
   Copy-Item ..\ImageMagick\Wand\*.h .\Deps\include\wand -recurse
   Copy-Item ..\ImageMagick\Magick\*.h .\Deps\include\magick -recurse
+  Copy-Item ..\ImageMagick\Magick++\lib\*.h .\Deps\include\Magick++
+  Copy-Item ..\ImageMagick\Magick++\lib\Magick++\*.h .\Deps\include\Magick++
   Copy-Item ..\ImageMagick\LICENSE .\Deps\LICENSE.txt
 
   CheckExitCode "Failed to copy files."
