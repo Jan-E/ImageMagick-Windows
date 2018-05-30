@@ -3,6 +3,8 @@
 cd ..
 call CloneRepositories.cmd https://github.com/ImageMagick shallow
 
+copy files-dlls.isx \ImageMagick\VisualMagick\installer\inc\ /y
+
 set INNOSETUP=C:\InnoSetup
 if exist "C:\InnoSetup" goto strawberry
 
