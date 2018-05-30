@@ -18,19 +18,9 @@ environment:
 
   matrix:
     - im_platform: "x64"
-      im_name:     "deps-dll-Q16"
-      im_vstudio:  "VS2015"
-      im_toolset:  "v140"
-
-    - im_platform: "x64"
       im_name:     "dll-Q16"
       im_vstudio:  "VS2015"
       im_toolset:  "v140"
-
-    - im_platform: "x64"
-      im_name:     "deps-dll-Q16"
-      im_vstudio:  "VS2013"
-      im_toolset:  "v120"
 
     - im_platform: "x64"
       im_name:     "dll-Q16"
@@ -38,19 +28,9 @@ environment:
       im_toolset:  "v120"
 
     - im_platform: "x86"
-      im_name:     "deps-dll-Q16"
-      im_vstudio:  "VS2015"
-      im_toolset:  "v140"
-
-    - im_platform: "x86"
       im_name:     "dll-Q16"
       im_vstudio:  "VS2015"
       im_toolset:  "v140"
-
-    - im_platform: "x86"
-      im_name:     "deps-dll-Q16"
-      im_vstudio:  "VS2013"
-      im_toolset:  "v120"
 
     - im_platform: "x86"
       im_name:     "dll-Q16"
