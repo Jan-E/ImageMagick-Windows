@@ -184,6 +184,7 @@ function CreatePackage($config, $version)
   if ($config.type -eq "installer")
   {
     CreateInstaller $config
+    CreateDeps $config $version
   }
   elseif ($config.type -eq "portable")
   {
@@ -264,8 +265,8 @@ function CreateDeps($config, $version)
   Copy-Item ..\VisualMagick\lib\*.* .\Deps\lib
   Copy-Item ..\ImageMagick\Wand\*.h .\Deps\include\wand -recurse
   Copy-Item ..\ImageMagick\Magick\*.h .\Deps\include\magick -recurse
-  Copy-Item ..\ImageMagick\Magick++\lib\*.h .\Deps\include\Magick++
-  Copy-Item ..\ImageMagick\Magick++\lib\Magick++\*.h .\Deps\include\Magick++
+  Copy-Item ..\ImageMagick\Magick++\lib\Magick++.h .\Deps\include
+  Copy-Item ..\ImageMagick\Magick++\lib\Magick++\*.h .\Deps\include\Magick++ -recurse
   Copy-Item ..\ImageMagick\LICENSE .\Deps\LICENSE.txt
 
   CheckExitCode "Failed to copy files."
