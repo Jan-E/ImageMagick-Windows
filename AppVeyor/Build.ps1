@@ -1,4 +1,4 @@
-function GetConfig($platform, $name)
+function GetConfig($platform, $name, $vcversion, $toolset)
 {
   $config = $null
   $options = "/includeOptional /installedSupport /deprecated"
@@ -38,6 +38,8 @@ function GetConfig($platform, $name)
   {
     $config.platform = $platform
     $config.name = $name
+    $config.vcversion = $vcversion
+    $config.toolset = $toolset
   }
 
   return $config
@@ -95,11 +97,22 @@ function BuildConfiguration($config)
   Start-Process configure.exe -ArgumentList "/noWizard /VS2013 $options" -wait
 
   Set-Location ..
-  msbuild $config.solution /m:4 /t:Rebuild ("/p:Configuration=Release,Platform=$platformName")
+  foreach ($f in gci -r -include "*.vcxproj*") 
+    { (gc $f.fullname) |
+       foreach { $_ -replace "v141_xp" ,"$($config.toolset)" } |
+       foreach { $_ -replace "v140_xp" ,"$($config.toolset)" } |
+       foreach { $_ -replace "v120_xp" ,"$($config.toolset)" } |
+       foreach { $_ -replace "v110_xp" ,"$($config.toolset)" } |
+       foreach { $_ -replace "v100_xp" ,"$($config.toolset)" } |
+       foreach { $_ -replace "v141"    ,"$($config.toolset)" } |
+       foreach { $_ -replace "v140"    ,"$($config.toolset)" } |
+       foreach { $_ -replace "v120"    ,"$($config.toolset)" } |
+       foreach { $_ -replace "v110"    ,"$($config.toolset)" } |
+       foreach { $_ -replace "v100"    ,"$($config.toolset)" } |
+       sc $f.fullname 
+    }
+  devenv $config.solution /Build "Release|$platformName"
   CheckExitCode "Failed to build: $($config.name)"
-
-  SignFiles "bin\*.exe"
-  SignFiles "bin\*.dll"
 
   Set-Location ../AppVeyor
 
@@ -133,6 +146,7 @@ function CreatePackage($config, $version)
   if ($config.type -eq "installer")
   {
     CreateInstaller $config
+    CreateDeps $config $version
   }
   elseif ($config.type -eq "portable")
   {
@@ -150,7 +164,6 @@ function CreateInstaller($config)
   CheckExitCode "Failed to create setup executable."
 
   Get-ChildItem -Path ..\VisualMagick\installer\output\*.exe -Recurse | Move-Item -Destination ..\Windows-Distribution
-  SignFiles "..\Windows-Distribution\*.exe"
 }
 
 function CreateZipFile($fileName, $directory)
@@ -195,6 +208,30 @@ function CreatePortable($config, $version)
   CreateZipFile $output ".\Portable"
 }
 
+function CreateDeps($config, $version)
+{
+  New-Item -ItemType directory -Path .\Deps | Out-Null
+  New-Item -ItemType directory -Path .\Deps\bin | Out-Null	
+  New-Item -ItemType directory -Path .\Deps\lib | Out-Null
+  New-Item -ItemType directory -Path .\Deps\include | Out-Null
+  New-Item -ItemType directory -Path .\Deps\include\MagickWand | Out-Null
+  New-Item -ItemType directory -Path .\Deps\include\MagickCore | Out-Null
+  New-Item -ItemType directory -Path .\Deps\include\Magick++ | Out-Null
+
+  Copy-Item ..\VisualMagick\bin\*.* .\Deps\bin
+  Copy-Item ..\VisualMagick\lib\*.* .\Deps\lib
+  Copy-Item ..\ImageMagick\MagickWand\*.h .\Deps\include\MagickWand -recurse
+  Copy-Item ..\ImageMagick\MagickCore\*.h .\Deps\include\MagickCore -recurse
+  Copy-Item ..\ImageMagick\Magick++\lib\Magick++.h .\Deps\include
+  Copy-Item ..\ImageMagick\Magick++\lib\Magick++\*.h .\Deps\include\Magick++ -recurse
+  Copy-Item ..\ImageMagick\LICENSE .\Deps\LICENSE.txt
+
+  CheckExitCode "Failed to copy files."
+
+  $output = "..\Windows-Distribution\ImageMagick-$($version)-$($config.vcversion)-$($config.platform).zip"
+  CreateZipFile $output ".\Deps"
+}
+
 function CreateSource($version)
 {
   $folder = ".\Source\ImageMagick-$version"
@@ -220,28 +257,20 @@ function CreateSource($version)
   CreateZipFile $output ".\Source"
 }
 
-function SignFiles($files)
+function CheckUpload()
 {
-  foreach($file in $files)
-  {
-    for ($i=0; $i -le 10; $i++)
-    {
-      Start-Sleep -s $i
-      & $env:SignTool sign /f $env:KeyFile /p "$env:CertPassword" /tr http://sha256timestamp.ws.symantec.com/sha256/timestamp /td sha256 /fd sha256 $file
-      if ($LastExitCode -eq 0)
-      {
-        break
-      }
-    }
-    if ($LastExitCode -ne 0)
-    {
-      throw "Failed to sign files."
-    }
-  }
+#  $day = (Get-Date).DayOfWeek
+#  if ($day -ne "Saturday" -And $day -ne "Sunday")
+#  {
+#    Write-Host "Only uploading in the weekend."
+#    Remove-Item ..\Windows-Distribution\*
+#  }
 }
 
 $platform = $args[0]
 $name = $args[1]
+$vcversion = $args[2]
+$toolset = $args[3]
 
 $version = GetVersion
 
@@ -253,7 +282,7 @@ if ($name -eq "source")
 }
 else
 {
-  $config = GetConfig $platform $name
+  $config = GetConfig $platform $name $vcversion $toolset
   if ($config -eq $null)
   {
     throw "Unknown configuration: $name"
@@ -262,4 +291,5 @@ else
   BuildConfigure
   BuildConfiguration $config
   CreatePackage $config $version
+  CheckUpload
 }

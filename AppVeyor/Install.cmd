@@ -3,6 +3,9 @@
 cd ..
 call CloneRepositories.cmd https://github.com/ImageMagick shallow
 
+if "%3"=="VS2017" copy files-dlls.isx \ImageMagick\VisualMagick\installer\inc\ /y
+if "%3"=="VS2015" copy files-dlls.isx \ImageMagick\VisualMagick\installer\inc\ /y
+
 set INNOSETUP=C:\InnoSetup
 if exist "C:\InnoSetup" goto x86
 

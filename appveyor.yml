@@ -1,6 +1,4 @@
-version: ImageMagick-Windows.{build}
-
-os: Visual Studio 2013
+version: ImageMagick-{branch}.{build}
 
 clone_folder: C:\ImageMagick
 shallow_clone: true
@@ -12,55 +10,112 @@ matrix:
 
 environment:
 
-  PfxUri:
-    secure: bQc3Nboe/KLQhUg19FYGyNxL+w6OQ7pTTE2OXPBi2JD9aQICOH9ZNO8MRioScKRSeMR39Jw1T/s3Pnz5pZ2K4pbntOqS5FnF94VnKkekee9MYHOnhSOMh4YrI9D+HmRdTuC+Q0B6IsO2gC1iATI7y2RkbB7cOHYgycyGVuotLVs=
-  KeyFile: C:\ImageMagick.pfx
-
-  SignTool: C:\Program Files (x86)\Windows Kits\8.1\bin\x64\signtool.exe
-  CertPassword:
-    secure: xjf6AHE97wYhvhEfMbZk5OxbrhbMDIu0yFtC2P2BSkX28quRX/in25YUvKe8rWURJpRVbpDH5btHC5BpCBb+Iw==
-
   matrix:
     - im_platform: "x64"
-      im_name:     "dll-Q8"
-    - im_platform: "x64"
       im_name:     "dll-Q16"
-    - im_platform: "x64"
-      im_name:     "static-Q8"
-    - im_platform: "x64"
-      im_name:     "static-Q16"
-
-    - im_platform: "x86"
-      im_name:     "dll-Q8"
+      vstudio:     "VS2017"
+      toolset:     "v141"
+      APPVEYOR_BUILD_WORKER_IMAGE: "Visual Studio 2017"
     - im_platform: "x86"
       im_name:     "dll-Q16"
-    - im_platform: "x86"
-      im_name:     "static-Q8"
-    - im_platform: "x86"
-      im_name:     "static-Q16"
+      vstudio:     "VS2017"
+      toolset:     "v141"
+      APPVEYOR_BUILD_WORKER_IMAGE: "Visual Studio 2017"
 
     - im_platform: "x64"
-      im_name:     "hdri-dll-Q16"
-    - im_platform: "x64"
-      im_name:     "hdri-static-Q16"
+      im_name:     "dll-Q16"
+      vstudio:     "VS2015"
+      toolset:     "v140"
+      APPVEYOR_BUILD_WORKER_IMAGE: "Visual Studio 2015"
+    - im_platform: "x86"
+      im_name:     "dll-Q16"
+      vstudio:     "VS2015"
+      toolset:     "v140"
+      APPVEYOR_BUILD_WORKER_IMAGE: "Visual Studio 2015"
 
+    - im_platform: "x64"
+      im_name:     "dll-Q16"
+      vstudio:     "VS2013"
+      toolset:     "v120"
+      APPVEYOR_BUILD_WORKER_IMAGE: "Visual Studio 2013"
     - im_platform: "x86"
-      im_name:     "hdri-dll-Q16"
-    - im_platform: "x86"
-      im_name:     "hdri-static-Q16"
+      im_name:     "dll-Q16"
+      vstudio:     "VS2013"
+      toolset:     "v120"
+      APPVEYOR_BUILD_WORKER_IMAGE: "Visual Studio 2013"
 
     - im_platform: "x64"
       im_name:     "portable-Q16"
+      vstudio:     "VS2013"
+      toolset:     "v120"
+      APPVEYOR_BUILD_WORKER_IMAGE: "Visual Studio 2013"
     - im_platform: "x86"
       im_name:     "portable-Q16"
+      vstudio:     "VS2013"
+      toolset:     "v120"
+      APPVEYOR_BUILD_WORKER_IMAGE: "Visual Studio 2013"
 
     - im_platform: "none"
       im_name:     "source"
+      vstudio:     "VS2013"
+      toolset:     "v120"
+      APPVEYOR_BUILD_WORKER_IMAGE: "Visual Studio 2013"
+
+    - im_platform: "x64"
+      im_name:     "hdri-dll-Q16"
+      vstudio:     "VS2013"
+      toolset:     "v120"
+      APPVEYOR_BUILD_WORKER_IMAGE: "Visual Studio 2013"
+    - im_platform: "x64"
+      im_name:     "dll-Q8"
+      vstudio:     "VS2013"
+      toolset:     "v120"
+      APPVEYOR_BUILD_WORKER_IMAGE: "Visual Studio 2013"
+    - im_platform: "x64"
+      im_name:     "hdri-static-Q16"
+      vstudio:     "VS2013"
+      toolset:     "v120"
+      APPVEYOR_BUILD_WORKER_IMAGE: "Visual Studio 2013"
+    - im_platform: "x64"
+      im_name:     "static-Q16"
+      vstudio:     "VS2013"
+      toolset:     "v120"
+      APPVEYOR_BUILD_WORKER_IMAGE: "Visual Studio 2013"
+    - im_platform: "x64"
+      im_name:     "static-Q8"
+      vstudio:     "VS2013"
+      toolset:     "v120"
+      APPVEYOR_BUILD_WORKER_IMAGE: "Visual Studio 2013"
+
+    - im_platform: "x86"
+      im_name:     "hdri-dll-Q16"
+      vstudio:     "VS2013"
+      toolset:     "v120"
+      APPVEYOR_BUILD_WORKER_IMAGE: "Visual Studio 2013"
+    - im_platform: "x86"
+      im_name:     "dll-Q8"
+      vstudio:     "VS2013"
+      toolset:     "v120"
+      APPVEYOR_BUILD_WORKER_IMAGE: "Visual Studio 2013"
+    - im_platform: "x86"
+      im_name:     "hdri-static-Q16"
+      vstudio:     "VS2013"
+      toolset:     "v120"
+      APPVEYOR_BUILD_WORKER_IMAGE: "Visual Studio 2013"
+    - im_platform: "x86"
+      im_name:     "static-Q16"
+      vstudio:     "VS2013"
+      toolset:     "v120"
+      APPVEYOR_BUILD_WORKER_IMAGE: "Visual Studio 2013"
+    - im_platform: "x86"
+      im_name:     "static-Q8"
+      vstudio:     "VS2013"
+      toolset:     "v120"
+      APPVEYOR_BUILD_WORKER_IMAGE: "Visual Studio 2013"
 
 install:
-  - ps: Start-FileDownload $env:PfxUri -FileName $env:KeyFile
   - cd AppVeyor
-  - Install.cmd %im_platform%
+  - Install.cmd %im_platform% %im_name% %vstudio% %toolset%
 
 artifacts:
   - path: 'Windows-Distribution\*.exe'
@@ -69,10 +124,12 @@ artifacts:
 
 build_script:
   - cd AppVeyor
-  - Build.cmd %im_platform% %im_name%
+  - Build.cmd %im_platform% %im_name% %vstudio% %toolset%
 
 test: off
 
-deploy:
-  - provider: Environment
-    name: ImageMagick7
+# whitelist only master branch for testing pull requests
+# ratio: make it possible to sync master from upstream repo
+branches:
+    only:
+        - master
