@@ -17,17 +17,28 @@ clone_repository()
 
   if [ "$2" == "full" ]; then
     if [ ! -d "$dir" ]; then
+      echo git clone -b $branch $1/$3.git $dir
       git clone -b $branch $1/$3.git $dir
     fi
     cd $dir
     git pull
     cd ..
   else
-    if [ ! -d "$dir" ]; then
-      git clone -b $branch --depth 1 $1/$3.git $dir
+    if [ "" != "$6" ]; then
+      echo git clone -b $branch $1/$3.git $dir
+      git clone -b $branch $1/$3.git $dir
+    else 
+      if [ ! -d "$dir" ]; then
+        echo git clone -b $branch --depth 1 $1/$3.git $dir
+        git clone -b $branch --depth 1 $1/$3.git $dir
+      fi
     fi
   fi
   cd $dir
+  if [ "" != "$6" ]; then
+    echo git checkout "$6"
+    git checkout "$6"
+  fi
   git show --oneline -s
   cd ..
 }
