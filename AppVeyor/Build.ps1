@@ -94,7 +94,8 @@ function BuildConfiguration($config)
   }
 
   Set-Location ../VisualMagick/configure
-  Start-Process configure.exe -ArgumentList "/noWizard /VS2013 $options" -wait
+  Write-Host "configure.exe /noWizard /VS2015 $options"
+  Start-Process configure.exe -ArgumentList "/noWizard /VS2015 $options" -wait
 
   Set-Location ..
   foreach ($f in gci -r -include "*.vcxproj*") 
