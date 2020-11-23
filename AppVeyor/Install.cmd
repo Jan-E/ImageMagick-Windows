@@ -23,7 +23,8 @@ set VISUALMAGICKBIN=C:\ImageMagick\VisualMagick\bin
 cd %VISUALMAGICKBIN%
 
 echo Downloading ffmpeg-4.2-win32.exe
-appveyor DownloadFile https://github.com/ImageMagick/ImageMagick-Windows/releases/download/20160630/ffmpeg-4.2-win32.exe -FileName "ffmpeg.exe"
+appveyor DownloadFile https://github.com/ImageMagick/ImageMagick-Windows/releases/download/20200615/ffmpeg-4.2.3-win32.exe -FileName "ffmpeg.exe"
+appveyor DownloadFile https://github.com/ImageMagick/ImageMagick-Windows/releases/download/20200615/hp2xx.exe -FileName "hp2xx.exe"
 
 set STRAWBERRYX86=C:\Strawberry-x86
 if exist %STRAWBERRYX86% goto install
@@ -41,7 +42,8 @@ set VISUALMAGICKBIN=C:\ImageMagick\VisualMagick\bin
 cd %VISUALMAGICKBIN%
 
 echo Downloading ffmpeg-4.2-win64.exe
-appveyor DownloadFile https://github.com/ImageMagick/ImageMagick-Windows/releases/download/20160630/ffmpeg-4.2-win64.exe -FileName "ffmpeg.exe"
+appveyor DownloadFile https://github.com/ImageMagick/ImageMagick-Windows/releases/download/20200615/ffmpeg-4.2.3-win64.exe -FileName "ffmpeg.exe"
+appveyor DownloadFile https://github.com/ImageMagick/ImageMagick-Windows/releases/download/20200615/hp2xx.exe -FileName "hp2xx.exe"
 
 set STRAWBERRY64=C:\Strawberry-x64
 if exist %STRAWBERRY64% goto install
