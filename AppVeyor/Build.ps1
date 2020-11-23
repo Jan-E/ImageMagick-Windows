@@ -94,7 +94,7 @@ function BuildConfiguration($config)
   }
 
   Set-Location ../VisualMagick/configure
-  Write-Host "configure.exe /noWizard /VS2015 $options"
+  Write-Host "configure.exe /noWizard /VS2019 $options"
   Start-Process configure.exe -ArgumentList "/noWizard /VS2015 $options" -wait
 
   Set-Location ..
