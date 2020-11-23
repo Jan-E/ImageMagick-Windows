@@ -128,8 +128,6 @@ build_script:
 
 test: off
 
-# whitelist only master branch for testing pull requests
-# ratio: make it possible to sync master from upstream repo
 branches:
     only:
-        - master
+        - ImageMagick-Windows-7
