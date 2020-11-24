@@ -9,7 +9,7 @@ function GetConfig($platform, $name, $vcversion, $toolset)
   }
   elseif ($name -eq "dll-Q16")
   {
-    $config = @{options="/dmt /noHdri /Q16 $options";perl=$true;type="deps";solution="VisualDynamicMT.sln"}
+    $config = @{options="/dmt /noHdri /Q16 $options";perl=$true;type="installer";solution="VisualDynamicMT.sln"}
   }
   elseif ($name -eq "static-Q8")
   {
