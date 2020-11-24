@@ -5,11 +5,11 @@ function GetConfig($platform, $name, $vcversion, $toolset)
 
   if ($name -eq "dll-Q8")
   {
-    $config = @{options="/dmt /noHdri /Q8 $options";perl=$false;type="installer";solution="VisualDynamicMT.sln"}
+    $config = @{options="/dmt /noHdri /Q8 $options";perl=$true;type="installer";solution="VisualDynamicMT.sln"}
   }
   elseif ($name -eq "dll-Q16")
   {
-    $config = @{options="/dmt /noHdri /Q16 $options";perl=$false;type="installer";solution="VisualDynamicMT.sln"}
+    $config = @{options="/dmt /noHdri /Q16 $options";perl=$true;type="installer";solution="VisualDynamicMT.sln"}
   }
   elseif ($name -eq "static-Q8")
   {
@@ -22,7 +22,7 @@ function GetConfig($platform, $name, $vcversion, $toolset)
 
   elseif ($name -eq "hdri-dll-Q16")
   {
-    $config = @{options="/dmt /hdri /Q16 $options";perl=$false;type="installer";solution="VisualDynamicMT.sln"}
+    $config = @{options="/dmt /hdri /Q16 $options";perl=$true;type="installer";solution="VisualDynamicMT.sln"}
   }
   elseif ($name -eq "hdri-static-Q16")
   {
@@ -131,13 +131,14 @@ function BuildPerlMagick($platform)
   Set-Location ../ImageMagick/PerlMagick
 
   & "$folder\perl\bin\perl.exe" "Makefile.PL" "MAKE=nmake"
-  CheckExitCode "Failed to create Makefile: $($name)"
-
-  & "nmake"
-  CheckExitCode "Failed to build PerlMagick"
-
-  & "nmake" "release"
-  CheckExitCode "Failed to build PerlMagick release"
+  if ($LastExitCode -eq 0)
+  {
+    & "nmake"
+    if ($LastExitCode -eq 0)
+    {
+      & "nmake" "release"
+    }
+  }
 
   Set-Location ../../AppVeyor
 }
