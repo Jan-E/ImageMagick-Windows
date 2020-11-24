@@ -9,7 +9,7 @@ function GetConfig($platform, $name, $vcversion, $toolset)
   }
   elseif ($name -eq "dll-Q16")
   {
-    $config = @{options="/dmt /noHdri /Q16 $options";perl=$true;type="installer";solution="VisualDynamicMT.sln"}
+    $config = @{options="/dmt /noHdri /Q16 $options";perl=$true;type="deps";solution="VisualDynamicMT.sln"}
   }
   elseif ($name -eq "static-Q8")
   {
@@ -147,6 +147,10 @@ function CreatePackage($config, $version)
   if ($config.type -eq "installer")
   {
     CreateInstaller $config
+    CreateDeps $config $version
+  }
+  elseif ($config.type -eq "deps")
+  {
     CreateDeps $config $version
   }
   elseif ($config.type -eq "portable")
