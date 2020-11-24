@@ -57,6 +57,5 @@ appveyor DownloadFile https://github.com/ImageMagick/ImageMagick-Windows/release
 
 cd C:\ImageMagick\AppVeyor
 powershell -ExecutionPolicy Unrestricted .\Install-InnoSetup.ps1
-if "%1" == "x86" powershell -ExecutionPolicy Unrestricted .\Install-StrawberryPerl-x86.ps1
-if "%1" == "x64" powershell -ExecutionPolicy Unrestricted .\Install-StrawberryPerl-x64.ps1
+powershell -ExecutionPolicy Unrestricted .\Install-StrawberryPerl-x64.ps1
 cd ..
