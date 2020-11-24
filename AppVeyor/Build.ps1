@@ -131,14 +131,13 @@ function BuildPerlMagick($platform)
   Set-Location ../ImageMagick/PerlMagick
 
   & "$folder\perl\bin\perl.exe" "Makefile.PL" "MAKE=nmake"
-  if ($LastExitCode -eq 0)
-  {
-    & "nmake"
-    if ($LastExitCode -eq 0)
-    {
-      & "nmake" "release"
-    }
-  }
+  CheckExitCode "Failed to create Makefile: $($name)"
+
+  & "nmake"
+  CheckExitCode "Failed to build PerlMagick"
+
+  & "nmake" "release"
+  CheckExitCode "Failed to build PerlMagick release"
 
   Set-Location ../../AppVeyor
 }
