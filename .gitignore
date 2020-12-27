@@ -1,3 +1,5 @@
+/aom
+/brotli
 /bzlib
 /cairo
 /contrib
@@ -7,11 +9,15 @@
 /ffi
 /flif
 /freetype
+/fribidi
 /glib
+/harfbuzz
+/highway
 /ImageMagick
 /jbig
 /jp2
 /jpeg
+/jpeg-xl
 /lcms
 /libde265
 /libheif
@@ -19,6 +25,7 @@
 /libraw
 /librsvg
 /libxml
+/libzip
 /lqr
 /openjpeg
 /pango
