@@ -1,7 +1,15 @@
 @echo off
 
 cd ..
+cd
 call CloneRepositories.cmd https://github.com/ImageMagick shallow
+cd
+echo Downloading brunsli
+if not exist brunsli git clone https://github.com/google/brunsli
+dir brunsli\c\include\brunsli
+xcopy brunsli\c\include\brunsli\*.* jpeg-xl\lib\include\brunsli\
+dir jpeg-xl\lib\include
+dir jpeg-xl\lib\include\brunsli
 
 if "%3"=="VS2017" copy files-dlls.isx \ImageMagick\VisualMagick\installer\inc\ /y
 if "%3"=="VS2015" copy files-dlls.isx \ImageMagick\VisualMagick\installer\inc\ /y
