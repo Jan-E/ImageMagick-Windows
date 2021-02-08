@@ -48,21 +48,16 @@ function GetConfig($platform, $name, $vcversion, $toolset)
 function GetVersion()
 {
   $version = "7.x.x"
-  $addendum = "-x"
 
-  foreach ($line in [System.IO.File]::ReadLines("../ImageMagick/version.sh"))
+  foreach ($line in [System.IO.File]::ReadLines("../ImageMagick/configure"))
   {
-    if ($line.StartsWith("PACKAGE_RELEASE="))
-    {
-      $addendum = "-" + $line.SubString(17, $line.Length - 18)
-    }
-    elseif ($line.StartsWith("PACKAGE_VERSION="))
+    if ($line.StartsWith("PACKAGE_VERSION="))
     {
       $version = $line.SubString(17, $line.Length - 18)
     }
   }
 
-  return "$version$addendum"
+  return "$version"
 }
 
 function CheckExitCode($msg)
@@ -94,8 +89,8 @@ function BuildConfiguration($config)
   }
 
   Set-Location ../VisualMagick/configure
-  Write-Host "configure.exe /noWizard /VS2019 $options"
-  Start-Process configure.exe -ArgumentList "/noWizard /VS2015 $options" -wait
+  Write-Host "configure.exe /noWizard /$vcversion $options"
+  Start-Process configure.exe -ArgumentList "/noWizard /$vcversion $options" -wait
 
   Set-Location ..
   foreach ($f in gci -r -include "*.vcxproj*") 

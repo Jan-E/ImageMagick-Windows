@@ -5,7 +5,7 @@ clone_repository()
   echo ''
   echo "Cloning $3"
 
-  branch="master"
+  branch="main"
   if [ ! -z "$4" ]; then
     branch="$4"
   fi
@@ -74,7 +74,7 @@ clone_repository $1 $2 'harfbuzz'
 clone_repository $1 $2 'highway'
 clone_repository $1 $2 'jbig'
 clone_repository $1 $2 'jp2'
-clone_repository $1 $2 'jpeg-turbo' 'master' 'jpeg'
+clone_repository $1 $2 'jpeg-turbo'
 clone_repository $1 $2 'jpeg-xl'
 clone_repository $1 $2 'lcms'
 clone_repository $1 $2 'libde265'
@@ -95,7 +95,7 @@ clone_repository $1 $2 'webp'
 clone_repository $1 $2 'win2k'
 clone_repository $1 $2 'zlib'
 
-clone_repository $1 $2 'ImageMagick' 'master' 'ImageMagick' '00d9f47'
+clone_repository $1 $2 'ImageMagick' 'main' 'ImageMagick' '35b4991'
 
 if [ "$2" == "source" ]; then
   for folder in *; do
