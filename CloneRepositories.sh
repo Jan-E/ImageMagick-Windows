@@ -95,7 +95,7 @@ clone_repository $1 $2 'webp'
 clone_repository $1 $2 'win2k'
 clone_repository $1 $2 'zlib'
 
-clone_repository $1 $2 'ImageMagick'
+clone_repository $1 $2 'ImageMagick' 'main' 'ImageMagick' 'ff86255'
 
 if [ "$2" == "source" ]; then
   for folder in *; do
